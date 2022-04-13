@@ -351,6 +351,7 @@
 "Assets/Scripts/GameManager.cs"
 "Assets/Scripts/Money.cs"
 "Assets/Scripts/Objects/Object.cs"
+"Assets/Scripts/Objects/Objectcs.cs"
 "Assets/Scripts/Player.cs"
 -langversion:9.0
 

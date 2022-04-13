@@ -12,3 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f8bd9edf580a1b4f85d7763ec9eba87, type: 3}
   m_Name: Money
   m_EditorClassIdentifier: 
+  ObjectName: Money
+  MaxMoney: 5
+  MinMoney: 3

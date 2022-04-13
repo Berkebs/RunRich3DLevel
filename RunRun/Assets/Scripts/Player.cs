@@ -19,7 +19,7 @@ public class Player : MonoBehaviour
     public int[] ReqMoney;
     public string[] LevelName;
 
-    public TextMeshProUGUI LevelNametxt;
+    public TextMeshPro LevelNametxt;
    
 
     void Start()
@@ -46,29 +46,50 @@ public class Player : MonoBehaviour
         }
         cc.Move(Vector3.forward * Time.deltaTime * verticalspeed);
     }
-    void PickingObject(int EarningMoney) 
+
+
+    void PickingObject(Objectcs go) 
     {
-        Money += EarningMoney;
+        Money += go.EarningMoney();
         if (Money >= ReqMoney[Level])
         {
-            LevelUp(ReqMoney[Level] - Money);
+            LevelUp(Money-ReqMoney[Level]);
         }
         else if (Money<0)
         {
-            LevelDown(Money);
+            LevelDown(ReqMoney[Level]-Money);
         }
+        Debug.Log("Level : " + Level + ",  Money : " + Money);
     }
 
 
-    void LevelUp(int excessmoney) 
+    void LevelUp(int excessmoney)
     {
-        Level++;
-        Money = excessmoney;
+        Debug.Log("Level Up  Level : " + Level + " Money : " + Money);
+        if (Level<ReqMoney.Length)
+        {
+            Level++;
+            Money = excessmoney;
+        }
+        else
+        {
+            Debug.Log("MaxLevel");
+        }
+
         LevelNametxt.text = LevelName[Level];
     }
     void LevelDown(int excessmoney) {
-        Level--;
-        Money=Mathf.Abs(excessmoney);
+        Debug.Log("Level Down  Level : " + Level + " Money : " + Money);
+        if (Level>0)
+        {
+            Level--;
+            Money = excessmoney;
+        }
+        else
+        {
+            Debug.Log("GameOver");
+        }
+
         LevelNametxt.text = LevelName[Level];
     }
 
@@ -76,7 +97,7 @@ public class Player : MonoBehaviour
     {
         if (other.tag=="Object")
         {
-            
+            PickingObject(other.gameObject.GetComponent<Objectcs>());
         }
     }
 

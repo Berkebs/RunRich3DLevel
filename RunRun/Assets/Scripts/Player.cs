@@ -18,18 +18,30 @@ public class Player : MonoBehaviour
     public int Level = 0;
     public int Money = 0;
     public int[] ReqMoney;
+    int totalReqMoney;
     public string[] LevelName;
 
-    public TextMeshProUGUI LevelNametxt;
+
+    public TextMeshProUGUI LevelNametxt,MoneyText;
     public Image MoneyImage;
+
+    public Animator Playeranim;
     Vector3 Charactergo;
+
+    public GameObject Model;
+    float rot=0;
     void Start()
     {
-        DOTween.Init();
+        Playeranim.SetTrigger("Run");   
         cc = this.gameObject.GetComponent<CharacterController>();
-        MoneyImage.fillAmount = (float)Money/ (float)ReqMoney[Level];
+
         LevelNametxt.text = LevelName[Level];
         Charactergo = Vector3.forward;
+        foreach (int item in ReqMoney)
+        {
+            totalReqMoney += item;
+        }
+        MoneyImage.fillAmount = (float)Money / (float)totalReqMoney;
     }
 
     // Update is called once per frame
@@ -83,59 +95,67 @@ public class Player : MonoBehaviour
         Money += go.EarningMoney();
         if (Money >= ReqMoney[Level])
         {
-            LevelUp(Money-ReqMoney[Level]);
+            LevelUp();
         }
-        else if (Money<0)
+        else if (Money<ReqMoney[Level])
         {
-            LevelDown(ReqMoney[Level]-Money);
+            LevelDown();
         }
-        Debug.Log("Level : " + Level + ",  Money : " + Money);
-        MoneyImage.fillAmount = (float)Money / (float)ReqMoney[Level];
+        MoneyText.text = Money.ToString();
+        MoneyImage.fillAmount = (float)Money / (float)totalReqMoney;
         LevelNametxt.text = LevelName[Level];
     }
 
 
-    void LevelUp(int excessmoney)
+    void LevelUp()
     {
-        Debug.Log("Level Up  Level : " + Level + " Money : " + Money);
         if (Level<ReqMoney.Length)
         {
+            Debug.Log(Level + "     " + ReqMoney.Length);
             Level++;
-            Money = excessmoney;
+            Playeranim.SetTrigger("Jump");
+
         }
         else
         {
             Debug.Log("MaxLevel");
         }
     }
-    void LevelDown(int excessmoney) {
-        Debug.Log("Level Down  Level : " + Level + " Money : " + Money);
+    void LevelDown() {
         if (Level>0)
         {
             Level--;
-            Money = excessmoney;
         }
         else
         {
-            Debug.Log("GameOver");
+            Playeranim.SetTrigger("Die");
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
+
         if (other.tag=="Object")
         {
             PickingObject(other.gameObject.GetComponent<Objectcs>());
         }
         else if (other.gameObject.name=="RightCol")
         {
-            ForwardController(transform.rotation.y + 90);
-            transform.DOLocalRotate(new Vector3(transform.rotation.x,transform.rotation.y+90,transform.rotation.z),1);
+            rot += 90;
+            ForwardController(rot);
+            //transform.DOLocalRotate(new Vector3(transform.rotation.x,transform.rotation.y+90,transform.rotation.z),1);
+            transform.DORotate(new Vector3(transform.rotation.x, rot, transform.rotation.z), 1);
         }
         else if (other.gameObject.name=="LeftCol")
         {
-            ForwardController(transform.rotation.y - 90);
-            transform.DOLocalRotate(new Vector3(transform.rotation.x, transform.rotation.y - 90, transform.rotation.z), 1);
+            rot -= 90;
+            ForwardController(rot);
+            transform.DOLocalRotate(new Vector3(transform.rotation.x, rot, transform.rotation.z), 1);
+        }
+        else if (other.gameObject.name=="Finish")
+        {
+            verticalspeed = 0;
+            Playeranim.SetTrigger("Dance");
         }
     }
 

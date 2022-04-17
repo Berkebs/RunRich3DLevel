@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Bottle
   m_EditorClassIdentifier: 
   ObjectName: Bottle
-  MaxMoney: -10
+  MaxMoney: -7
   MinMoney: -15

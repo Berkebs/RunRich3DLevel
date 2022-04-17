@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Money
   m_EditorClassIdentifier: 
   ObjectName: Money
-  MaxMoney: 5
+  MaxMoney: 15
   MinMoney: 3

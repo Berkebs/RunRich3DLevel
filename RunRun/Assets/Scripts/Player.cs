@@ -29,6 +29,7 @@ public class Player : MonoBehaviour
     Vector3 Charactergo;
 
     public GameObject Model;
+    public GameManager gameManager;
     float rot=0;
     void Start()
     {
@@ -93,16 +94,21 @@ public class Player : MonoBehaviour
     void PickingObject(Objectcs go) 
     {
         Money += go.EarningMoney();
-        if (Money >= ReqMoney[Level])
+        if (Level < ReqMoney.Length-1)
         {
-            LevelUp();
+            if (Money >= ReqMoney[Level + 1])
+            {
+                LevelUp();
+            }
+
         }
-        else if (Money<ReqMoney[Level])
+        if (Money < ReqMoney[Level])
         {
             LevelDown();
         }
+
         MoneyText.text = Money.ToString();
-        MoneyImage.fillAmount = (float)Money / (float)totalReqMoney;
+        MoneyImage.fillAmount = (float)Money / (float)ReqMoney[4];
         LevelNametxt.text = LevelName[Level];
     }
 
@@ -129,6 +135,7 @@ public class Player : MonoBehaviour
         else
         {
             Playeranim.SetTrigger("Die");
+            gameManager.Defeat(Money);
         }
     }
 
@@ -156,6 +163,7 @@ public class Player : MonoBehaviour
         {
             verticalspeed = 0;
             Playeranim.SetTrigger("Dance");
+            gameManager.Finish(Money);
         }
     }
 

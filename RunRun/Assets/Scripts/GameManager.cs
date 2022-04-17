@@ -1,18 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public Player Playercs;
+
+    public GameObject FinishPanel;
+    public TextMeshProUGUI FinishText,FinishMoneyText;
+    public void GoScene(int SceneNumber) 
     {
-        
+        SceneManager.LoadScene(SceneNumber);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Defeat(int Money) 
     {
-        
+        Playercs.enabled = false;
+        FinishText.text = "Defeat";
+        FinishMoneyText.text = Money.ToString();
+        FinishPanel.SetActive(true);
     }
+    public void Finish(int Money) 
+    {
+        Playercs.enabled = false;
+        FinishText.text = "Victory";
+        FinishMoneyText.text=Money.ToString();
+        FinishPanel.SetActive(true);
+    }
+
 }
